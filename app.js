@@ -654,6 +654,7 @@ function renderMap() {
     pin.setAttribute('aria-label', s.label);
     pin.style.left = s.mapX + '%';
     pin.style.top = s.mapY + '%';
+    pin.addEventListener('click', () => playSound('clickPin'));
 
     // Insert icon from PNG
     const img = document.createElement('img');

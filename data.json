@@ -91,6 +91,7 @@
     "hoverGames": "assets/sounds/hover-games.mp3",
     "hoverMap": "assets/sounds/hover-map.mp3",
     "hoverPin": "assets/sounds/hover-pin.mp3",
+    "clickPin": "assets/sounds/click-pin.mp3",
     "changeView": "assets/sounds/change-view.mp3",
     "flipHomeForward": "assets/sounds/about-spin1.mp3",
     "flipHomeBack": "assets/sounds/about-spin2.mp3",
