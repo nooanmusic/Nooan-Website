@@ -1,0 +1,108 @@
+{
+  "assets": {
+    "favicon": "assets/favicon.png",
+    "mapBackground": "assets/icons/map/map.png",
+    "thumbnailDir": "assets/thumbnails",
+    "videoDir": "assets/videos",
+    "mapIconDir": "assets/icons/map",
+    "navButtons": {
+      "videos": { "icon": "assets/icons/btn-videos.png", "iconHover": "assets/icons/btn-videos-hover.png" },
+      "games":  { "icon": "assets/icons/btn-games.png",  "iconHover": "assets/icons/btn-games-hover.png" },
+      "map":    { "icon": "assets/icons/btn-map.png",    "iconHover": "assets/icons/btn-map-hover.png" }
+    }
+  },
+  "theme": {
+    "bg": "#c8c0a8",
+    "panelBg": "#3d3532",
+    "accent": "#c47a4a",
+    "accentLight": "#d4956b",
+    "accentDark": "#a05a2a",
+    "accentPale": "#d9a67a",
+    "mapLand": "#a8b67a",
+    "mapSea": "#e8e0c8",
+    "textDark": "#3d3532",
+    "textLight": "#e8e0c8",
+    "shadow": "#2a2220",
+    "playerBg": "#000000"
+  },
+  "about": {
+    "name": "Noan Cittadino",
+    "bio": "My name is Noan and I'm a music composer, producer and sound designer from Barcelona, currently based in Bristol, UK. I've been playing games since forever and always felt like there was a depth to game music that wasn't matched by linear media, and my interest grew into a passion from there. I graduated from a commercial music course at Bath Spa University.\n\nMy music has always been eclectic. My references and inspirations encompass a multitude of genres, and when that translated into my own music, I realized that soundtrack work is where this versatility would serve me best. I've mainly worked on electronic and orchestral tracks, as well as done recording studio work both solo and with bands. I also have experience with both FMOD and Wwise as audio implementation middlewares. The visuals and atmosphere of a game are my biggest inspirations for the work I deliver, but my passion truly lies in the non-linear considerations that come into my composition process. It is my belief that a dynamic music system is the key to an elevated soundtrack (I wrote my dissertation on it!). Check out my {showreels} and {game jams} to listen to my work!\n\nIf you have any questions or would like to work together, here's a {map} of my socials or email me at {email:nooanmusic@gmail.com} :)",
+    "portrait": "assets/icons/noan.png"
+  },
+  "videos": [
+    {
+      "id": "crypt-necrodancer",
+      "title": "Crypt of the Necrodancer Re-Composition"
+    },
+    {
+      "id": "detroit",
+      "title": "Detroit Become Human Re-Composition"
+    },
+    {
+      "id": "empire-ants",
+      "title": "Empire of the Ants Trailer Re-Composition"
+    },
+    {
+      "id": "hilda",
+      "title": "Hilda Scene Re-Composition"
+    },
+    {
+      "id": "mario-kart",
+      "title": "Mario Kart 8 Electrodome Re-Composition"
+    }
+  ],
+  "games": [
+    {
+      "id": "strange-realm",
+      "title": "Strange Realm",
+      "description": "Made for Brackeys Game Jam 2026.1 by a team of 4 people in 6 days.",
+      "role": "Audio department: Music, SFX and FMOD Implementation.",
+      "itchUrl": "https://code-gremlins.itch.io/strange-realm"
+    },
+    {
+      "id": "fmod-test",
+      "title": "Nooan's FMOD Test Project",
+      "description": "A short game I made to teach myself how to use FMOD.",
+      "role": "Game Dev, Music and FMOD Implementation.",
+      "itchUrl": "https://nooanmusic.itch.io/nooans-fmod-test-project"
+    },
+    {
+      "id": "ups",
+      "title": "UPS (Ultimate Parcel Serpent)",
+      "description": "A snake-inspired parcel delivery game.",
+      "role": "FMOD Implementation (music and audio not mine!).",
+      "itchUrl": "https://exorion.itch.io/ultimate-parcel-serpent"
+    }
+  ],
+  "_soundEffectsGuide": "Each key below maps an interaction to an MP3 file in assets/sounds/. To change a sound, replace the MP3 file or update the path. Multiple keys can share the same file (e.g. flipHome/flipPfp variants all use change-view.mp3). To add a new sound: add the MP3 to assets/sounds/ and add a key here. If a key is missing or the file path is wrong, you'll see a warning in the browser console.",
+  "soundEffects": {
+    "openHome": "assets/sounds/open-home.mp3",
+    "closeHome": "assets/sounds/close-home.mp3",
+    "openVideos": "assets/sounds/open-videos.mp3",
+    "closeVideos": "assets/sounds/close-videos.mp3",
+    "openGames": "assets/sounds/open-games.mp3",
+    "closeGames": "assets/sounds/close-games.mp3",
+    "openMap": "assets/sounds/open-map.mp3",
+    "closeMap": "assets/sounds/close-map.mp3",
+    "openPlayer": "assets/sounds/open-player.mp3",
+    "closePlayer": "assets/sounds/close-player.mp3",
+    "hoverVideos": "assets/sounds/hover-videos.mp3",
+    "hoverGames": "assets/sounds/hover-games.mp3",
+    "hoverMap": "assets/sounds/hover-map.mp3",
+    "hoverPin": "assets/sounds/hover-pin.mp3",
+    "changeView": "assets/sounds/change-view.mp3",
+    "flipHomeForward": "assets/sounds/change-view.mp3",
+    "flipHomeBack": "assets/sounds/change-view.mp3",
+    "flipPfpForward": "assets/sounds/change-view.mp3",
+    "flipPfpBack": "assets/sounds/change-view.mp3"
+  },
+  "social": [
+    { "id": "instagram",  "label": "Instagram",  "url": "https://www.instagram.com/nooanishere/",                "icon": "instagram",  "mapX": 28, "mapY": 55 },
+    { "id": "linkedin",   "label": "LinkedIn",   "url": "https://www.linkedin.com/in/noan-cittadino-290587263/", "icon": "linkedin",   "mapX": 68, "mapY": 22 },
+    { "id": "itch",       "label": "Itch.io",    "url": "https://nooanmusic.itch.io/",                          "icon": "itch",       "mapX": 52, "mapY": 72 },
+    { "id": "soundcloud", "label": "SoundCloud",  "url": "https://soundcloud.com/noan-cittadino-110819025",      "icon": "soundcloud", "mapX": 76, "mapY": 38 },
+    { "id": "discord",    "label": "Discord",    "url": "https://discordapp.com/users/279749448790310913",       "icon": "discord",    "mapX": 22, "mapY": 28 },
+    { "id": "email",      "label": "Email",      "url": "mailto:nooanmusic@gmail.com",                          "icon": "email",      "mapX": 48, "mapY": 44 }
+  ]
+}

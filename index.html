@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Noan Cittadino — Music Composer & Sound Designer</title>
+  <meta name="description" content="Noan Cittadino — Music Composer, Producer & Sound Designer. Game audio, dynamic music systems, FMOD & Wwise.">
+  <meta name="keywords" content="Noan Cittadino, composer, producer, sound designer, game audio, game music, FMOD, Wwise, dynamic music, soundtrack, orchestral, electronic, portfolio">
+  <meta name="author" content="Noan Cittadino">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#c47a4a">
+  <link rel="canonical" href="https://noancittadino.com/">
+  <meta property="og:title" content="Noan Cittadino — Audio / Game Audio">
+  <meta property="og:description" content="Composer, Producer & Sound Designer specialising in game audio.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://noancittadino.com/">
+  <meta property="og:image" content="https://noancittadino.com/assets/icons/noan.png">
+  <meta property="og:site_name" content="Noan Cittadino">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Noan Cittadino — Audio / Game Audio">
+  <meta name="twitter:description" content="Composer, Producer & Sound Designer specialising in game audio.">
+  <meta name="twitter:image" content="https://noancittadino.com/assets/icons/noan.png">
+  <link rel="icon" href="assets/favicon.png" type="image/png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Noan Cittadino",
+    "jobTitle": "Music Composer, Producer and Sound Designer",
+    "description": "Composer, Producer & Sound Designer specialising in game audio and dynamic music systems.",
+    "url": "https://noancittadino.com/",
+    "nationality": "Spanish",
+    "alumniOf": {
+      "@type": "CollegeOrUniversity",
+      "name": "Bath Spa University"
+    },
+    "sameAs": [
+      "https://www.instagram.com/nooanishere/",
+      "https://www.linkedin.com/in/noan-cittadino-290587263/",
+      "https://nooanmusic.itch.io/",
+      "https://soundcloud.com/noan-cittadino-110819025"
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ====== HOME SCREEN ====== -->
+  <div id="home-screen">
+    <div id="home-panel">
+      <div class="flip-container">
+        <!-- ====== FRONT: portrait + nav buttons ====== -->
+        <div class="flip-front">
+          <div class="window-titlebar" id="home-titlebar">
+            <span class="window-title">Noan Cittadino</span>
+            <div class="titlebar-controls">
+              <button class="close-btn" id="close-home" aria-label="Close" title="Close">&times;</button>
+            </div>
+          </div>
+          <div id="home-body">
+            <nav id="nav-buttons">
+              <button class="nav-btn btn-press" id="btn-videos" aria-label="Videos" title="Videos">
+                <img class="btn-icon" alt="">
+                <img class="btn-icon-hover" alt="">
+              </button>
+              <button class="nav-btn btn-press" id="btn-games" aria-label="Games" title="Games">
+                <img class="btn-icon" alt="">
+                <img class="btn-icon-hover" alt="">
+              </button>
+              <button class="nav-btn btn-press" id="btn-map" aria-label="Map" title="Map">
+                <img class="btn-icon" alt="">
+                <img class="btn-icon-hover" alt="">
+              </button>
+            </nav>
+            <div id="portrait-area">
+              <img id="portrait-img" alt="Noan Cittadino">
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== BACK: about + credits ====== -->
+        <div class="flip-back">
+          <div class="window-titlebar">
+            <button class="back-btn" id="flip-back-btn" aria-label="Back" title="Back">&lsaquo;</button>
+            <span class="window-title">About</span>
+            <div class="titlebar-controls">
+              <button class="close-btn" id="close-home-back" aria-label="Close" title="Close">&times;</button>
+            </div>
+          </div>
+          <div id="about-text">
+            <div id="pfp-gallery"></div>
+            <div id="about-bio"></div>
+            <div id="credits">
+              <p>Drawings by: <a href="https://www.instagram.com/tomatito.noa/" target="_blank" rel="noopener noreferrer">@tomatito.noa</a></p>
+              <p>Web: <a href="https://meowrhino.studio" target="_blank" rel="noopener noreferrer">meowrhino.studio</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reopen button -->
+    <button id="reopen-btn" class="btn-press" hidden>noan</button>
+    <button id="howto-btn" hidden>how to</button>
+  </div>
+
+  <!-- ====== VIDEOS WINDOW ====== -->
+  <div class="window-frame" id="window-videos" hidden>
+    <div class="window-titlebar">
+      <span class="window-title">Videos</span>
+      <div class="titlebar-controls">
+        <button class="close-btn" aria-label="Close" title="Close">&times;</button>
+      </div>
+    </div>
+    <div class="window-content themed-scroll" id="videos-content"></div>
+  </div>
+
+  <!-- ====== GAMES WINDOW ====== -->
+  <div class="window-frame" id="window-games" hidden>
+    <div class="window-titlebar">
+      <span class="window-title">Games</span>
+      <div class="titlebar-controls">
+        <button class="close-btn" aria-label="Close" title="Close">&times;</button>
+      </div>
+    </div>
+    <div class="window-content themed-scroll" id="games-content"></div>
+  </div>
+
+  <!-- ====== MAP WINDOW ====== -->
+  <div class="window-frame" id="window-map" hidden>
+    <div class="window-titlebar">
+      <span class="window-title">Map</span>
+      <div class="titlebar-controls">
+        <button class="close-btn" aria-label="Close" title="Close">&times;</button>
+      </div>
+    </div>
+    <div class="window-content themed-scroll" id="map-content">
+      <div class="map-container">
+        <img alt="Map" class="map-bg">
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== TEMPLATES ====== -->
+
+  <!-- Video card -->
+  <template id="tpl-video-card">
+    <div class="card card-video">
+      <div class="card-thumb">
+        <img loading="lazy" alt="">
+      </div>
+      <div class="card-info">
+        <span class="card-title"></span>
+      </div>
+    </div>
+  </template>
+
+  <!-- Game card -->
+  <template id="tpl-game-card">
+    <div class="card card-game">
+      <div class="card-thumb">
+        <img loading="lazy" alt="">
+      </div>
+      <div class="card-info">
+        <span class="card-title"></span>
+        <span class="card-desc-gray"></span>
+        <span class="card-role"></span>
+      </div>
+      <div class="card-external" title="Opens in new tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+          <polyline points="15 3 21 3 21 9"/>
+          <line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+      </div>
+    </div>
+  </template>
+
+  <!-- Player window -->
+  <template id="tpl-player-window">
+    <div class="window-frame player-window">
+      <div class="window-titlebar">
+        <span class="window-title"></span>
+        <div class="titlebar-controls">
+          <button class="close-btn" aria-label="Close" title="Close">&times;</button>
+        </div>
+      </div>
+      <div class="window-content player-content"></div>
+    </div>
+  </template>
+
+  <!-- Map pin -->
+  <template id="tpl-map-pin">
+    <a class="map-pin" target="_blank" rel="noopener noreferrer">
+      <span class="map-pin-label"></span>
+    </a>
+  </template>
+
+  <!-- ====== WELCOME WINDOW (shown on load) ====== -->
+  <div class="window-frame" id="welcome-window" hidden>
+    <div class="window-titlebar">
+      <span class="window-title">How To</span>
+      <div class="titlebar-controls">
+        <button class="close-btn" id="welcome-dismiss" aria-label="Close">&times;</button>
+      </div>
+    </div>
+    <div class="window-content themed-scroll welcome-content">
+      <p>Drag any window by its title bar to move it around! You can close and reopen any window! Enjoy!</p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

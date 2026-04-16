@@ -1,0 +1,923 @@
+/* ====== RESET & BASE ====== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* --- Colors (overridden by theme in data.json) --- */
+  --bg:              #c8c0a8;
+  --panel-bg:        #3d3532;
+  --accent:          #c47a4a;
+  --accent-light:    #d4956b;
+  --accent-dark:     #a05a2a;
+  --accent-pale:     #d9a67a;
+  --map-land:        #a8b67a;
+  --map-sea:         #e8e0c8;
+  --text-dark:       #3d3532;
+  --text-light:      #e8e0c8;
+  --shadow:          #2a2220;
+  --player-bg:       #000000;
+
+  /* --- Typography --- */
+  --font-hand:       'Lexend', system-ui, sans-serif;
+  --font-body:       'Lexend', system-ui, sans-serif;
+
+  /* --- Borders & Shadows --- */
+  --border-thin:     3px;
+  --border-thick:    4px;
+
+  /* --- Layout --- */
+  --panel-max-width: 480px;
+  --titlebar-size:   36px;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text-dark);
+  overflow: hidden;
+}
+
+/*
+ * Animated diamond background.
+ * Uses repeating-conic-gradient rotated 45° to create a checker/diamond pattern.
+ * The oversized element (250%) + rotation ensures full coverage with no gaps.
+ * bgMove scrolls the pattern horizontally for a subtle parallax effect.
+ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -75%;
+  width: 250%;
+  height: 250%;
+  opacity: 0.55;
+  background: repeating-conic-gradient(var(--accent-dark) 0% 25%, var(--bg) 0% 50%) 0 0 / 80px 80px;
+  transform: rotate(45deg);
+  animation: bgMove 30s linear infinite;
+  will-change: background-position;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@keyframes bgMove {
+  from { background-position: 0 0; }
+  to   { background-position: 320px 0; }
+}
+
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+img { display: block; max-width: 100%; }
+
+/* --- Shared scrollbar theme (Firefox + WebKit) --- */
+.themed-scroll {
+  scrollbar-color: var(--accent-dark) var(--accent-light);
+  scrollbar-width: thin;
+}
+
+.themed-scroll::-webkit-scrollbar { width: 16px; }
+.themed-scroll::-webkit-scrollbar-track { background: var(--accent-light); border-left: var(--border-thin) solid var(--shadow); }
+.themed-scroll::-webkit-scrollbar-thumb { background: var(--accent-dark); border: 2px solid var(--accent-light); }
+
+/*
+ * Shared "press-in" button pattern.
+ * Default: elevated (translated up-left with shadow).
+ * Hover: flat (no translate, smaller shadow).
+ * Active: pushed past flat (translate down-right, no shadow).
+ */
+.btn-press {
+  transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+  transform: translate(-2px, -3px);
+}
+
+.btn-press:hover {
+  transform: translate(0, 0);
+  background: var(--accent-pale);
+}
+
+.btn-press:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--accent-dark);
+}
+
+/*
+ * Z-INDEX STRATEGY
+ * ────────────────
+ * 0          body::before (animated background)
+ * 1          #home-screen (flex container, pointer-events: none)
+ *   1        #howto-btn (fixed, behind panel but above background)
+ *   2        #home-panel (relative, within home-screen)
+ *   10       #reopen-btn (relative, within home-screen)
+ * 100+       .window-frame (dynamic, incremented via state.nextZIndex in JS)
+ *   2-3      .map-pin (within map window, local stacking)
+ */
+
+/* ====== HOME SCREEN ====== */
+#home-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: clamp(12px, 4vw, 40px);
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+#home-panel {
+  max-width: var(--panel-max-width);
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
+  perspective: 1000px;
+}
+
+#home-panel.hidden { display: none; }
+
+/* ====== FLIP SYSTEM ====== */
+.flip-container {
+  position: relative;
+  width: 100%;
+  transition: transform 0.6s ease;
+  transform-style: preserve-3d;
+}
+
+#home-panel.flipped .flip-container {
+  transform: rotateY(180deg);
+}
+
+.flip-front,
+.flip-back {
+  backface-visibility: hidden;
+  background: var(--panel-bg);
+  border: var(--border-thick) solid var(--shadow);
+  box-shadow: 6px 6px 0 var(--shadow);
+  overflow: hidden;
+}
+
+.flip-back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+}
+
+#home-body {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 3vw, 32px);
+  padding: clamp(16px, 3vw, 40px);
+}
+
+/* Reopen button — large centered button to bring back the home panel */
+#reopen-btn {
+  font-family: var(--font-hand);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: lowercase;
+  color: var(--text-dark);
+  background: var(--accent-light);
+  border: var(--border-thick) solid var(--accent-dark);
+  padding: 16px 36px;
+  box-shadow: 6px 6px 0 var(--accent-dark);
+  cursor: pointer;
+  z-index: 10;
+  position: relative;
+  pointer-events: auto;
+}
+
+#reopen-btn:hover {
+  box-shadow: 3px 3px 0 var(--accent-dark);
+}
+
+#reopen-btn[hidden] { display: none; }
+
+/* ====== NAV BUTTONS ====== */
+#nav-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex-shrink: 0;
+}
+
+/* Default state = "popped out" (elevated) */
+.nav-btn {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  border: var(--border-thin) solid var(--accent-dark);
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 5px 5px 0 var(--accent-dark);
+}
+
+.nav-btn .btn-icon,
+.nav-btn .btn-icon-hover {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.nav-btn .btn-icon-hover { display: none; }
+.nav-btn:hover .btn-icon { display: none; }
+.nav-btn:hover .btn-icon-hover { display: block; }
+
+/* Hover = "pushed in" (flat) */
+.nav-btn:hover {
+  box-shadow: 2px 2px 0 var(--accent-dark);
+}
+
+/* ====== PORTRAIT (flip front) ====== */
+#portrait-area {
+  flex: 1;
+  background: var(--accent-light);
+  overflow: hidden;
+  border: var(--border-thin) solid var(--shadow);
+  cursor: pointer;
+  min-height: 280px;
+}
+
+#portrait-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* ====== ABOUT TEXT (flip back) ====== */
+#about-text {
+  padding: clamp(20px, 4vw, 40px) clamp(18px, 3vw, 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--text-light);
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-color: var(--accent-dark) var(--accent-light);
+  scrollbar-width: thin;
+}
+
+#about-text::-webkit-scrollbar { width: 14px; }
+#about-text::-webkit-scrollbar-track { background: var(--accent-light); border-left: var(--border-thin) solid var(--shadow); }
+#about-text::-webkit-scrollbar-thumb { background: var(--accent-dark); border: 2px solid var(--accent-light); }
+
+#about-bio {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+#about-bio p { margin-bottom: 0.8em; }
+#about-bio p:last-child { margin-bottom: 0; }
+
+.bio-link {
+  color: var(--accent-light);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.1s;
+}
+
+.bio-link:hover {
+  color: var(--accent-pale);
+}
+
+/* Navigation links (showreels, game jams, map) — stronger orange */
+.bio-nav {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.bio-nav:hover {
+  color: var(--accent-pale);
+}
+
+#credits {
+  margin-top: auto;
+  font-size: 0.8rem;
+  opacity: 0.6;
+  line-height: 1.6;
+  text-align: center;
+}
+
+#credits a {
+  color: var(--accent-light);
+  text-decoration: none;
+}
+
+#credits a:hover {
+  text-decoration: underline;
+}
+
+.flip-back .window-titlebar {
+  padding-left: 0;
+}
+
+/* Back button in flip-back titlebar (mirrors .close-btn) */
+.back-btn {
+  width: var(--titlebar-size);
+  height: var(--titlebar-size);
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: var(--border-thin) solid var(--shadow);
+  background: var(--accent-light);
+  transition: background 0.08s;
+  flex-shrink: 0;
+}
+
+.back-btn:hover {
+  background: var(--accent-pale);
+}
+
+.back-btn:active {
+  background: var(--accent-dark);
+}
+
+/* ====== WINDOW SYSTEM ====== */
+.window-frame {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 640px;
+  height: 480px;
+  background: var(--panel-bg);
+  border: var(--border-thick) solid var(--shadow);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 6px 6px 0 var(--shadow);
+  opacity: 0;
+  overflow: hidden;
+}
+
+.window-frame[hidden] { display: none; }
+
+.window-frame.open {
+  opacity: 1;
+  animation: pop-in 0.15s ease-out;
+}
+
+@keyframes pop-in {
+  from { opacity: 0; scale: 0.95; }
+  to   { opacity: 1; scale: 1; }
+}
+
+.window-frame.closing {
+  animation: pop-out 0.15s ease-in forwards;
+}
+
+@keyframes pop-out {
+  from { opacity: 1; scale: 1; }
+  to   { opacity: 0; scale: 0.96; }
+}
+
+/* Titlebar: accent bar with title on left, controls on right */
+.window-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--accent);
+  padding: 0 0 0 12px;
+  min-height: var(--titlebar-size);
+  flex-shrink: 0;
+  border-bottom: var(--border-thin) solid var(--shadow);
+  cursor: grab;
+  user-select: none;
+}
+
+.window-titlebar:active { cursor: grabbing; }
+
+.window-frame.dragging {
+  transition: none;
+}
+
+.window-frame.dragged {
+  transform: none !important;
+}
+
+.window-title {
+  font-family: var(--font-hand);
+  font-size: 1.1rem;
+  color: var(--text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.titlebar-controls {
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  height: 100%;
+}
+
+/* Close button: square at the end of titlebar */
+.close-btn {
+  width: var(--titlebar-size);
+  height: var(--titlebar-size);
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: var(--border-thin) solid var(--shadow);
+  background: var(--accent-light);
+  transition: background 0.08s;
+}
+
+.close-btn:hover {
+  background: var(--accent-pale);
+}
+
+.close-btn:active {
+  background: var(--accent-dark);
+}
+
+/* ====== WINDOW CONTENT ====== */
+.window-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  min-height: 0;
+  scrollbar-color: var(--accent-dark) var(--accent-light);
+  scrollbar-width: thin;
+}
+
+.window-content::-webkit-scrollbar { width: 18px; }
+.window-content::-webkit-scrollbar-track { background: var(--accent-light); border-left: var(--border-thin) solid var(--shadow); }
+.window-content::-webkit-scrollbar-thumb { background: var(--accent-dark); border: var(--border-thin) solid var(--accent-light); }
+
+/* ====== VIDEO / GAME CARDS — ICON VIEW ====== */
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* Shared card base */
+.card {
+  display: flex;
+  overflow: hidden;
+  background: var(--accent);
+  cursor: pointer;
+  transition: transform 0.08s, box-shadow 0.08s;
+  border: var(--border-thin) solid var(--shadow);
+  box-shadow: 3px 3px 0 var(--shadow);
+}
+
+.card:hover,
+.card:focus-visible {
+  transform: translate(-1px, -2px);
+  box-shadow: 5px 5px 0 var(--shadow);
+  outline: 2px solid var(--text-dark);
+  outline-offset: 2px;
+}
+
+.card:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--shadow);
+}
+
+/* Video cards: horizontal */
+.card-video {
+  flex-direction: row;
+}
+
+.card-video .card-thumb {
+  width: 120px;
+  height: 90px;
+  flex-shrink: 0;
+  background: var(--accent-pale);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-right: var(--border-thin) solid var(--shadow);
+}
+
+/* Game cards: vertical */
+.card-game {
+  flex-direction: column;
+}
+
+.card-game .card-thumb {
+  width: 100%;
+  height: 120px;
+  background: var(--accent-pale);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-bottom: var(--border-thin) solid var(--shadow);
+}
+
+.card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+.card-info {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  min-width: 0;
+}
+
+.card-game .card-info {
+  align-items: center;
+  text-align: center;
+  padding: 10px 8px;
+}
+
+.card-title {
+  font-family: var(--font-hand);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  line-height: 1.2;
+}
+
+/* ====== CARDS — COLUMN VIEW (1-column, horizontal cards) ====== */
+.cards-column {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.cards-column .card {
+  flex-direction: row;
+}
+
+.cards-column .card .card-thumb {
+  width: 40%;
+  align-self: stretch;
+  flex-shrink: 0;
+  border-bottom: none;
+  border-right: var(--border-thin) solid var(--shadow);
+}
+
+.cards-column .card .card-info {
+  flex: 1;
+  min-width: 0;
+  align-items: flex-start;
+  text-align: left;
+  justify-content: flex-start;
+  padding: 8px 12px;
+}
+
+.cards-column .card-desc-gray {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  opacity: 0.7;
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+.cards-column .card-role {
+  font-size: 0.68rem;
+  color: var(--text-light);
+  opacity: 0.5;
+  line-height: 1.2;
+  margin-top: 3px;
+}
+
+/* External link indicator strip */
+.card-external {
+  width: var(--titlebar-size);
+  flex-shrink: 0;
+  background: var(--accent-light);
+  border-left: var(--border-thin) solid var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-external svg {
+  width: 16px;
+  height: 16px;
+  color: var(--text-dark);
+  opacity: 0.8;
+}
+
+.card:hover .card-external {
+  background: var(--accent-pale);
+}
+
+.card.thumb-error {
+  background: var(--accent-light);
+  justify-content: center;
+  min-height: 80px;
+}
+
+/* ====== VIDEO PLAYER ====== */
+.player-window {
+  width: 800px;
+  height: 500px;
+}
+
+.player-content {
+  padding: 0 !important;
+  background: var(--player-bg);
+}
+
+.player-content video {
+  width: 100%;
+  display: block;
+  max-height: calc(500px - 42px);
+}
+
+.player-error {
+  color: var(--text-light);
+  text-align: center;
+  padding: 2rem;
+  opacity: 0.7;
+}
+
+/* ====== FANTASY MAP ====== */
+#map-content {
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--map-sea);
+}
+
+.map-container {
+  position: relative;
+  width: 100%;
+}
+
+.map-bg {
+  width: 100%;
+  display: block;
+}
+
+.map-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  background: var(--accent);
+  border: var(--border-thin) solid var(--accent-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dark);
+  text-decoration: none;
+  transition: transform 0.1s, box-shadow 0.1s;
+  box-shadow: 2px 2px 0 var(--accent-dark);
+  z-index: 2;
+}
+
+.map-pin:hover {
+  transform: translate(-50%, -50%) translate(-1px, -2px);
+  box-shadow: 4px 4px 0 var(--accent-dark);
+  z-index: 3;
+}
+
+.map-pin img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.map-pin-label {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-hand);
+  font-size: 0.7rem;
+  white-space: nowrap;
+  color: var(--text-dark);
+  opacity: 0;
+  transition: opacity 0.1s;
+  pointer-events: none;
+  background: var(--bg);
+  padding: 1px 5px;
+  border: 1px solid var(--text-dark);
+}
+
+.map-pin:hover .map-pin-label {
+  opacity: 1;
+}
+
+/* ====== HOW-TO BUTTON ====== */
+#howto-btn {
+  font-family: var(--font-hand);
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  color: var(--text-dark);
+  background: var(--accent-light);
+  border: var(--border-thin) solid var(--accent-dark);
+  padding: 8px 20px;
+  box-shadow: 4px 4px 0 var(--accent-dark);
+  cursor: pointer;
+  position: fixed;
+  bottom: 10dvh;
+  left: 50%;
+  transform: translate(calc(-50% - 2px), -3px);
+  z-index: 1;
+  pointer-events: auto;
+}
+
+#howto-btn:hover {
+  transform: translate(-50%, 0);
+  box-shadow: 2px 2px 0 var(--accent-dark);
+  background: var(--accent-pale);
+}
+
+#howto-btn:active {
+  transform: translate(calc(-50% + 2px), 2px);
+  box-shadow: 0 0 0 var(--accent-dark);
+}
+
+#howto-btn[hidden] { display: none; }
+
+/* Welcome window */
+#welcome-window {
+  width: 440px;
+  height: auto;
+}
+
+.welcome-content {
+  padding: 20px 24px !important;
+  text-align: center;
+}
+
+.welcome-content p {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* ====== PFP GALLERY ====== */
+#pfp-gallery {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+  perspective: 600px;
+  cursor: pointer;
+}
+
+.pfp-flipper {
+  width: 140px;
+  height: 140px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+}
+
+.pfp-flipper.flipped {
+  transform: rotateY(180deg);
+}
+
+.pfp-flipper.flip-reverse {
+  transition: transform 0.5s ease;
+}
+
+.pfp-flipper.flip-reverse.flipped {
+  transform: rotateY(-180deg);
+}
+
+.pfp-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border: var(--border-thin) solid var(--shadow);
+  box-shadow: 4px 4px 0 var(--shadow);
+  overflow: hidden;
+}
+
+.pfp-face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pfp-back {
+  transform: rotateY(180deg);
+}
+
+/* ====== RESPONSIVE: TABLET ====== */
+@media (max-width: 768px) {
+  .window-frame {
+    width: 90vw;
+    height: 70vh;
+  }
+
+  /* Override ID-level width on welcome window for mobile */
+  #welcome-window {
+    width: min(440px, 92vw);
+    height: auto;
+  }
+
+  .player-window {
+    width: 95vw;
+    height: 60vh;
+  }
+
+  .player-content video {
+    max-height: calc(60vh - 42px);
+  }
+
+  #home-panel {
+    max-width: 360px;
+  }
+
+  .nav-btn {
+    width: 60px;
+    height: 60px;
+  }
+
+  .nav-btn .btn-icon,
+  .nav-btn .btn-icon-hover {
+    width: 40px;
+    height: 40px;
+  }
+
+  #nav-buttons {
+    gap: 16px;
+  }
+
+  #portrait-area {
+    min-height: 200px;
+  }
+
+  .window-title {
+    font-size: 0.95rem;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card-video .card-thumb {
+    width: 100px;
+    height: 75px;
+  }
+}
+
+/* ====== RESPONSIVE: PHONE ====== */
+@media (max-width: 480px) {
+  .window-frame {
+    width: 96vw;
+    height: 75vh;
+  }
+
+  #home-panel {
+    max-width: 300px;
+  }
+
+  .nav-btn {
+    width: 50px;
+    height: 50px;
+  }
+
+  .nav-btn .btn-icon,
+  .nav-btn .btn-icon-hover {
+    width: 34px;
+    height: 34px;
+  }
+
+  #portrait-area {
+    min-height: 160px;
+  }
+
+  #home-body {
+    padding: clamp(10px, 2vw, 20px);
+    gap: clamp(10px, 2vw, 16px);
+  }
+
+  .map-pin {
+    width: 30px;
+    height: 30px;
+  }
+
+  .map-pin img {
+    width: 16px;
+    height: 16px;
+  }
+
+  .pfp-flipper {
+    width: 110px;
+    height: 110px;
+  }
+}
