@@ -77,8 +77,8 @@
   ],
   "_soundEffectsGuide": "Each key below maps an interaction to an MP3 file in assets/sounds/. To change a sound, replace the MP3 file or update the path. Multiple keys can share the same file (e.g. flipHome/flipPfp variants all use change-view.mp3). To add a new sound: add the MP3 to assets/sounds/ and add a key here. If a key is missing or the file path is wrong, you'll see a warning in the browser console.",
   "soundEffects": {
-    "openHome": "assets/sounds/open-home.mp3",
-    "closeHome": "assets/sounds/close-home.mp3",
+    "openHome": "assets/sounds/open-noan.mp3",
+    "closeHome": "assets/sounds/close-noan.mp3",
     "openVideos": "assets/sounds/open-videos.mp3",
     "closeVideos": "assets/sounds/close-videos.mp3",
     "openGames": "assets/sounds/open-games.mp3",
