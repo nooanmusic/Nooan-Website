@@ -161,6 +161,14 @@ img { display: block; max-width: 100%; }
   flex-direction: column;
 }
 
+#home-panel.flipped .flip-front {
+  pointer-events: none;
+}
+
+#home-panel:not(.flipped) .flip-back {
+  pointer-events: none;
+}
+
 #home-body {
   display: flex;
   align-items: center;

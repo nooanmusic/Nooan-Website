@@ -777,17 +777,20 @@ function bindEvents() {
     closeHome();
   });
 
-  // Flip: click portrait to show about
-  dom.portraitArea.addEventListener('click', () => {
-    dom.homePanel.classList.add('flipped');
-    playSound('flipHomeForward');
-  });
-
-  // Flip back: click back button to return to front
-  dom.flipBackBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    dom.homePanel.classList.remove('flipped');
-    playSound('flipHomeBack');
+  // Flip: click on the portrait to flip to about section
+  dom.homePanel.addEventListener('click', (e) => {
+    if (e.target.closest('.nav-btn')) return;
+    if (dom.homePanel.classList.contains('flipped')) {
+      if (e.target.closest('#flip-back-btn') || (!e.target.closest('#pfp-gallery') && !e.target.closest('.bio-link'))) {
+        dom.homePanel.classList.remove('flipped');
+        playSound('flipHomeBack');
+      }
+    } else {
+      if (e.target.closest('#portrait-img')) {
+        dom.homePanel.classList.add('flipped');
+        playSound('flipHomeForward');
+      }
+    }
   });
 
   // Reopen button
