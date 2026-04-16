@@ -102,6 +102,7 @@ function dismissWelcome() {
   const win = dom.welcomeWindow;
   win.classList.remove('open');
   win.classList.add('closing');
+  playSound('closeWelcome');
   state.openWindows.delete('welcome-window');
   const idx = state.windowStack.indexOf('welcome-window');
   if (idx !== -1) state.windowStack.splice(idx, 1);
@@ -125,6 +126,7 @@ function initHowTo() {
   dom.howtoBtn.addEventListener('click', () => {
     if (dom.welcomeWindow.hidden) {
       dom.howtoBtn.hidden = true;
+      playSound('openWelcome');
       showWelcomeWindow();
     } else {
       dom.welcomeWindow.style.zIndex = state.nextZIndex++;
