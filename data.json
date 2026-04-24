@@ -92,13 +92,13 @@
     "hoverMap": "assets/sounds/hover-map.mp3",
     "hoverPin": "assets/sounds/hover-pin.mp3",
     "clickPin": "assets/sounds/click-pin.mp3",
-    "openWelcome": "assets/sounds/open-noan.mp3",
-    "closeWelcome": "assets/sounds/close-noan.mp3",
+    "openWelcome": "assets/sounds/open-howto.mp3",
+    "closeWelcome": "assets/sounds/close-howto.mp3",
     "changeView": "assets/sounds/change-view.mp3",
     "flipHomeForward": "assets/sounds/about-spin1.mp3",
     "flipHomeBack": "assets/sounds/about-spin2.mp3",
-    "flipPfpForward": "assets/sounds/about-spin1.mp3",
-    "flipPfpBack": "assets/sounds/about-spin2.mp3"
+    "flipPfpForward": "assets/sounds/flip-foto.mp3",
+    "flipPfpBack": "assets/sounds/flip-foto-back.mp3"
   },
   "social": [
     { "id": "instagram",  "label": "Instagram",  "url": "https://www.instagram.com/nooanishere/",                "icon": "instagram",  "mapX": 28, "mapY": 55 },
