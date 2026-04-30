@@ -43,6 +43,9 @@ const state = {
   hasHover: window.matchMedia('(hover: hover)').matches,
   homeOpen: true,
   lang: detectInitialLang(),
+  currentHoverPin: null,
+  currentHoverVideoCard: null,
+  currentHoverGameCard: null,
 };
 
 /* ====== ASSET PATHS (derived from id, dirs from data.json) ====== */
@@ -565,6 +568,22 @@ function renderVideos() {
       card.classList.add('thumb-error');
     });
     clone.querySelector('.card-title').textContent = v.title;
+
+    // Add hover sound listeners directly to the card
+    if (state.hasHover) {
+      card.addEventListener('mouseenter', () => {
+        if (card !== state.currentHoverVideoCard) {
+          playSound('hoverPin', { pitch: 0.8 + Math.random() * 0.4 });
+          state.currentHoverVideoCard = card;
+        }
+      });
+      card.addEventListener('mouseleave', () => {
+        if (card === state.currentHoverVideoCard) {
+          state.currentHoverVideoCard = null;
+        }
+      });
+    }
+
     grid.appendChild(clone);
   });
 
@@ -604,6 +623,22 @@ function renderGames() {
     const roleText = localized(g.role);
     if (roleText) role.textContent = roleText;
     else role.remove();
+
+    // Add hover sound listeners directly to the card
+    if (state.hasHover) {
+      card.addEventListener('mouseenter', () => {
+        if (card !== state.currentHoverGameCard) {
+          playSound('hoverPin', { pitch: 0.8 + Math.random() * 0.4 });
+          state.currentHoverGameCard = card;
+        }
+      });
+      card.addEventListener('mouseleave', () => {
+        if (card === state.currentHoverGameCard) {
+          state.currentHoverGameCard = null;
+        }
+      });
+    }
+
     column.appendChild(clone);
   });
 
@@ -714,6 +749,22 @@ function renderMap() {
     pin.insertBefore(img, pin.firstChild);
 
     clone.querySelector('.map-pin-label').textContent = s.label;
+
+    // Add hover sound listeners directly to the pin
+    if (state.hasHover) {
+      pin.addEventListener('mouseenter', () => {
+        if (pin !== state.currentHoverPin) {
+          playSound('hoverPin', { pitch: 0.8 + Math.random() * 0.4 });
+          state.currentHoverPin = pin;
+        }
+      });
+      pin.addEventListener('mouseleave', () => {
+        if (pin === state.currentHoverPin) {
+          state.currentHoverPin = null;
+        }
+      });
+    }
+
     container.appendChild(clone);
   });
 }
@@ -840,7 +891,7 @@ function initCursor() {
   document.addEventListener('mousedown', (e) => {
     document.body.classList.add('cursor-down');
     if (e.target.closest(INTERACTIVE)) return;
-    playSound('globalClick', { pitch: 0.85 + Math.random() * 0.3 });
+    playSound('globalClick', { pitch: 0.8 + Math.random() * 0.4 });
   });
   const release = () => document.body.classList.remove('cursor-down');
   document.addEventListener('mouseup', release);
@@ -948,13 +999,6 @@ function bindEvents() {
   dom.gamesContent.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleGameCard(e); }
   });
-
-  // Hover sounds on map pins (delegated via capture)
-  if (state.hasHover) {
-    dom.mapContent.addEventListener('mouseenter', (e) => {
-      if (e.target.closest('.map-pin')) playSound('hoverPin');
-    }, true);
-  }
 
   // Bio links → open corresponding windows
   dom.aboutBio.addEventListener('click', (e) => {
