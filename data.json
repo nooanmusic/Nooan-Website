@@ -9,6 +9,11 @@
       "videos": { "icon": "assets/icons/btn-videos.png", "iconHover": "assets/icons/btn-videos-hover.png" },
       "games":  { "icon": "assets/icons/btn-games.png",  "iconHover": "assets/icons/btn-games-hover.png" },
       "map":    { "icon": "assets/icons/btn-map.png",    "iconHover": "assets/icons/btn-map-hover.png" }
+    },
+    "portraitHover": "assets/icons/noan-hover.png",
+    "cursor": {
+      "normal": "assets/cursor/normal.svg",
+      "click": "assets/cursor/click.svg"
     }
   },
   "theme": {
@@ -27,55 +32,68 @@
   },
   "about": {
     "name": "Noan Cittadino",
-    "bio": "My name is Noan and I'm a music composer, producer and sound designer from Barcelona, currently based in Bristol, UK. I've been playing games since forever and always felt like there was a depth to game music that wasn't matched by linear media, and my interest grew into a passion from there. I graduated from a commercial music course at Bath Spa University.\n\nMy music has always been eclectic. My references and inspirations encompass a multitude of genres, and when that translated into my own music, I realized that soundtrack work is where this versatility would serve me best. I've mainly worked on electronic and orchestral tracks, as well as done recording studio work both solo and with bands. I also have experience with both FMOD and Wwise as audio implementation middlewares. The visuals and atmosphere of a game are my biggest inspirations for the work I deliver, but my passion truly lies in the non-linear considerations that come into my composition process. It is my belief that a dynamic music system is the key to an elevated soundtrack (I wrote my dissertation on it!). Check out my {showreels} and {game jams} to listen to my work!\n\nIf you have any questions or would like to work together, here's a {map} of my socials or email me at {email:nooanmusic@gmail.com} :)",
-    "portrait": "assets/icons/noan.png"
+    "portrait": "assets/icons/noan.png",
+    "bio": {
+      "en": "My name is Noan and I'm a music composer, producer and sound designer from Barcelona, currently based in Bristol, UK. I've been playing games since forever and always felt like there was a depth to game music that wasn't matched by linear media, and my interest grew into a passion from there. I graduated from a commercial music course at Bath Spa University.\n\nMy music has always been eclectic. My references and inspirations encompass a multitude of genres, and when that translated into my own music, I realized that soundtrack work is where this versatility would serve me best. I've mainly worked on electronic and orchestral tracks, as well as done recording studio work both solo and with bands. I also have experience with both FMOD and Wwise as audio implementation middlewares. The visuals and atmosphere of a game are my biggest inspirations for the work I deliver, but my passion truly lies in the non-linear considerations that come into my composition process. It is my belief that a dynamic music system is the key to an elevated soundtrack (I wrote my dissertation on it!). Check out my {showreels} and {game jams} to listen to my work!\n\nIf you have any questions or would like to work together, here's a {map} of my socials or email me at {email:nooanmusic@gmail.com} :)",
+      "es": "Soy Noan y soy un compositor, productor musical y diseñador de sonido nacido en Barcelona y viviendo en Bristol, UK. Los videojuegos han sido una parte de mi vida desde que soy niño, y siempre he sentido que la musica para videojuegos tiene una cierta profundidad única al formato no-linear, y de ahí mi interés se convirtió en pasión. Me he graduado en música comercial en Bath Spa University.\n\nMi música siempre ha tenido un carácter ecléctico. Mis referencias musicales son variadas en genero y estilos, y es cuando noté esa influencia en mi propia música que decidí especializarme en banda sonora. Trabajo principalmente con música electronica y orquestal, y tengo experiencia con estudios de grabación, tanto proyectos personales como bandas musicales. También tengo experience con FMOD y Wwise como middleware para implementar audio en juegos. Mi mayor inspiración viene de la parte visual y la atmósfera del proyecto, pero mi verdadera pasión reside en los enfoques no-lineales que surgen en mi proceso de composición. Parto de la base que un sistema de música dinámica es clave para una banda sonora de primera (De eso mismo trataba mi trabajo de final de carrera!) Echale un vistazo a mis {showreels} y {game jams}!\n\nPara cualquier duda o colaboración, te dejo un {map} de mis redes sociales, o envíame un mail a {email:nooanmusic@gmail.com} :)",
+      "fr": "Je m'appelle Noan et je suis compositeur, producteur musical et sound designer, né à Barcelone et installé a Bristol, UK. Les jeux vidéo m'ont accompagné depuis mon enfance, et j'ai toujours ressenti qu'il y a une profondeur dans la musique des jeux vidéo qui est unique au format non linéaire, et cet intérêt est devenu ma passion. Je suis diplômé en musique commerciale de Bath Spa University.\n\nMa musique a toujours eu un caractère éclectique. Mes références musicales incluent une multitude de styles et de genres, ce qui ce reflète dans ma propre musique et m'a conduit vers la composition de bandes originales. J'ai travaillé principalement sur des compositions électroniques et orchestrales, et j'ai également de l'expérience en studio d'enregistrement, aussi bien en solo qu'en groupe. J'ai de l'experience avec FMOD et Wwise comme middleware d'implementation d'audio. Je m'inspire principalement de l'atmosphère et la partie visuelle d'un projet; cependant, je suis particulièrement passionné par les approches non linéaires qui guident mon processus de composition. Je crois fermement que un système de musique dynamique est fondamental pour élever la bande son d'un jeu video (J'ai d'ailleurs rédigé mon travail de fin d'études sur ce sujet !) Jetez un œil a mes {showreels} et {game jams} pour découvrir mon travail !\n\nSi vous avez des questions ou souhaitez collaborer, voici une {map} de mes réseaux sociaux où vous pouvez me contacter à l'adresse suivante: {email:nooanmusic@gmail.com} :)"
+    }
   },
   "videos": [
-    {
-      "id": "crypt-necrodancer",
-      "title": "Crypt of the Necrodancer Re-Composition"
-    },
-    {
-      "id": "detroit",
-      "title": "Detroit Become Human Re-Composition"
-    },
-    {
-      "id": "empire-ants",
-      "title": "Empire of the Ants Trailer Re-Composition"
-    },
-    {
-      "id": "hilda",
-      "title": "Hilda Scene Re-Composition"
-    },
-    {
-      "id": "mario-kart",
-      "title": "Mario Kart 8 Electrodome Re-Composition"
-    }
+    { "id": "crypt-necrodancer", "title": "Crypt of the Necrodancer Re-Composition" },
+    { "id": "detroit",           "title": "Detroit Become Human Re-Composition" },
+    { "id": "empire-ants",       "title": "Empire of the Ants Trailer Re-Composition" },
+    { "id": "hilda",             "title": "Hilda Scene Re-Composition" },
+    { "id": "mario-kart",        "title": "Mario Kart 8 Electrodome Re-Composition" }
   ],
   "games": [
     {
       "id": "strange-realm",
       "title": "Strange Realm",
-      "description": "Made for Brackeys Game Jam 2026.1 by a team of 4 people in 6 days.",
-      "role": "Audio department: Music, SFX and FMOD Implementation.",
+      "description": {
+        "en": "Made for Brackeys Game Jam 2026.1 by a team of 4 people in 6 days.",
+        "es": "Hecho para Brackey's Game Jam 2026.1 por un equipo de 4 personas en 6 días.",
+        "fr": "Fait pour la Brackeys Game Jam 2026.1 par une équipe de 4 personnes en 6 jours."
+      },
+      "role": {
+        "en": "Audio department: Music, SFX and FMOD Implementation.",
+        "es": "Departamento de Audio: Música, SFX y implementación con FMOD.",
+        "fr": "Département audio: Musique, Son et implémentation avec FMOD."
+      },
       "itchUrl": "https://code-gremlins.itch.io/strange-realm"
     },
     {
       "id": "fmod-test",
       "title": "Nooan's FMOD Test Project",
-      "description": "A short game I made to teach myself how to use FMOD.",
-      "role": "Game Dev, Music and FMOD Implementation.",
+      "description": {
+        "en": "A short game I made to teach myself how to use FMOD.",
+        "es": "Un juego corto hecho por mi para aprender FMOD.",
+        "fr": "Un jeu court fait par moi pour apprendre FMOD."
+      },
+      "role": {
+        "en": "Game Dev, Music and FMOD Implementation.",
+        "es": "Desarrollo, música e implementación con FMOD.",
+        "fr": "Développement, musique et implémentation avec FMOD."
+      },
       "itchUrl": "https://nooanmusic.itch.io/nooans-fmod-test-project"
     },
     {
       "id": "ups",
       "title": "UPS (Ultimate Parcel Serpent)",
-      "description": "A snake-inspired parcel delivery game.",
-      "role": "FMOD Implementation (music and audio not mine!).",
+      "description": {
+        "en": "A snake-inspired parcel delivery game.",
+        "es": "Un juego sobre un dragón que entrega correos.",
+        "fr": "Un jeu sur un dragon qui livre du courrier."
+      },
+      "role": {
+        "en": "FMOD Implementation (music and audio not mine!).",
+        "es": "Implementación con FMOD (música y sonido no hechos por mí!).",
+        "fr": "Implémentation avec FMOD (la musique et le son ne sont pas à moi !)."
+      },
       "itchUrl": "https://exorion.itch.io/ultimate-parcel-serpent"
     }
   ],
-  "_soundEffectsGuide": "Each key below maps an interaction to an MP3 file in assets/sounds/. To change a sound, replace the MP3 file or update the path. Multiple keys can share the same file (e.g. flipHome/flipPfp variants all use change-view.mp3). To add a new sound: add the MP3 to assets/sounds/ and add a key here. If a key is missing or the file path is wrong, you'll see a warning in the browser console.",
+  "_soundEffectsGuide": "Each key below maps an interaction to an MP3 file in assets/sounds/. To change a sound, replace the MP3 file or update the path. Multiple keys can share the same file. To add a new sound: add the MP3 to assets/sounds/ and add a key here. If a key is missing or the file path is wrong, you'll see a warning in the browser console.",
   "soundEffects": {
     "openHome": "assets/sounds/open-noan.mp3",
     "closeHome": "assets/sounds/close-noan.mp3",
@@ -91,21 +109,72 @@
     "hoverGames": "assets/sounds/hover-games.mp3",
     "hoverMap": "assets/sounds/hover-map.mp3",
     "hoverPin": "assets/sounds/hover-pin.mp3",
+    "hoverHome": "assets/sounds/hover-home.mp3",
     "clickPin": "assets/sounds/click-pin.mp3",
     "openWelcome": "assets/sounds/open-howto.mp3",
     "closeWelcome": "assets/sounds/close-howto.mp3",
     "changeView": "assets/sounds/change-view.mp3",
+    "changeLang": "assets/sounds/change-lang.mp3",
     "flipHomeForward": "assets/sounds/about-spin1.mp3",
     "flipHomeBack": "assets/sounds/about-spin2.mp3",
     "flipPfpForward": "assets/sounds/flip-foto.mp3",
-    "flipPfpBack": "assets/sounds/flip-foto-back.mp3"
+    "flipPfpBack": "assets/sounds/flip-foto-back.mp3",
+    "globalClick": "assets/sounds/click-sound.mp3"
+  },
+  "_i18nGuide": "UI strings per language. Bios and game descriptions are translated inline in their own objects (about.bio, games[*].description, games[*].role). To add a new language: add a code (e.g. 'de') and translate every key here, plus add the same code to about.bio and every game description/role.",
+  "i18n": {
+    "en": {
+      "windowAbout": "About",
+      "windowVideos": "Videos",
+      "windowGames": "Games",
+      "windowMap": "Map",
+      "windowHowTo": "How To",
+      "btnReopen": "noan",
+      "btnHowto": "how to",
+      "welcome": "Drag any window by its title bar to move it around! You can close and reopen any window! Enjoy!",
+      "creditsDrawings": "Drawings by:",
+      "creditsWeb": "Web:",
+      "linkShowreels": "showreels",
+      "linkGameJams": "game jams",
+      "linkMap": "map"
+    },
+    "es": {
+      "windowAbout": "Sobre mí",
+      "windowVideos": "Videos",
+      "windowGames": "Juegos",
+      "windowMap": "Mapa",
+      "windowHowTo": "Cómo usar",
+      "btnReopen": "noan",
+      "btnHowto": "cómo usar",
+      "welcome": "¡Arrastra cualquier ventana por su barra de título para moverla! Puedes cerrar y reabrir cualquier ventana. ¡Disfruta!",
+      "creditsDrawings": "Dibujos:",
+      "creditsWeb": "Web:",
+      "linkShowreels": "showreels",
+      "linkGameJams": "game jams",
+      "linkMap": "mapa"
+    },
+    "fr": {
+      "windowAbout": "À propos",
+      "windowVideos": "Vidéos",
+      "windowGames": "Jeux",
+      "windowMap": "Carte",
+      "windowHowTo": "Mode d'emploi",
+      "btnReopen": "noan",
+      "btnHowto": "mode d'emploi",
+      "welcome": "Faites glisser n'importe quelle fenêtre par sa barre de titre ! Vous pouvez fermer et rouvrir toutes les fenêtres. Bonne visite !",
+      "creditsDrawings": "Dessins :",
+      "creditsWeb": "Web :",
+      "linkShowreels": "showreels",
+      "linkGameJams": "game jams",
+      "linkMap": "carte"
+    }
   },
   "social": [
     { "id": "instagram",  "label": "Instagram",  "url": "https://www.instagram.com/nooanishere/",                "icon": "instagram",  "mapX": 28, "mapY": 55 },
     { "id": "linkedin",   "label": "LinkedIn",   "url": "https://www.linkedin.com/in/noan-cittadino-290587263/", "icon": "linkedin",   "mapX": 68, "mapY": 22 },
     { "id": "itch",       "label": "Itch.io",    "url": "https://nooanmusic.itch.io/",                          "icon": "itch",       "mapX": 52, "mapY": 72 },
-    { "id": "soundcloud", "label": "SoundCloud",  "url": "https://soundcloud.com/noan-cittadino-110819025",      "icon": "soundcloud", "mapX": 76, "mapY": 38 },
-    { "id": "discord",    "label": "Discord",    "url": "https://discordapp.com/users/279749448790310913",       "icon": "discord",    "mapX": 22, "mapY": 28 },
+    { "id": "soundcloud", "label": "SoundCloud", "url": "https://soundcloud.com/noan-cittadino-110819025",      "icon": "soundcloud", "mapX": 76, "mapY": 38 },
+    { "id": "discord",    "label": "Discord",    "url": "https://discordapp.com/users/279749448790310913",      "icon": "discord",    "mapX": 22, "mapY": 28 },
     { "id": "email",      "label": "Email",      "url": "mailto:nooanmusic@gmail.com",                          "icon": "email",      "mapX": 48, "mapY": 44 }
   ]
 }

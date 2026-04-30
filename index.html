@@ -47,8 +47,29 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script>
+    // Set <html lang> synchronously before the body renders so the browser
+    // translation prompt doesn't appear when the resolved language differs
+    // from the static "en" attribute. Mirrors detectInitialLang() in app.js.
+    (function () {
+      var supported = ['en', 'es', 'fr'];
+      var lang = 'en';
+      try {
+        var stored = localStorage.getItem('lang');
+        if (stored && supported.indexOf(stored) !== -1) lang = stored;
+        else {
+          var nav = (navigator.language || '').toLowerCase().slice(0, 2);
+          if (supported.indexOf(nav) !== -1) lang = nav;
+        }
+      } catch (e) { /* private mode / disabled storage */ }
+      document.documentElement.lang = lang;
+    })();
+  </script>
 </head>
 <body>
+
+  <!-- ====== LANGUAGE TOGGLE ====== -->
+  <button id="lang-btn" type="button" aria-label="Change language" title="Change language">EN</button>
 
   <!-- ====== HOME SCREEN ====== -->
   <div id="home-screen">
@@ -79,6 +100,7 @@
             </nav>
             <div id="portrait-area">
               <img id="portrait-img" alt="Noan Cittadino">
+              <img id="portrait-img-hover" alt="" aria-hidden="true">
             </div>
           </div>
         </div>
@@ -87,7 +109,7 @@
         <div class="flip-back">
           <div class="window-titlebar">
             <button class="back-btn" id="flip-back-btn" aria-label="Back" title="Back">&lsaquo;</button>
-            <span class="window-title">About</span>
+            <span class="window-title" data-i18n="windowAbout">About</span>
             <div class="titlebar-controls">
               <button class="close-btn" id="close-home-back" aria-label="Close" title="Close">&times;</button>
             </div>
@@ -96,8 +118,8 @@
             <div id="pfp-gallery"></div>
             <div id="about-bio"></div>
             <div id="credits">
-              <p>Drawings by: <a href="https://www.instagram.com/tomatito.noa/" target="_blank" rel="noopener noreferrer">@tomatito.noa</a></p>
-              <p>Web: <a href="https://meowrhino.studio" target="_blank" rel="noopener noreferrer">meowrhino.studio</a></p>
+              <p><span data-i18n="creditsDrawings">Drawings by:</span> <a href="https://www.instagram.com/tomatito.noa/" target="_blank" rel="noopener noreferrer">@tomatito.noa</a></p>
+              <p><span data-i18n="creditsWeb">Web:</span> <a href="https://meowrhino.studio" target="_blank" rel="noopener noreferrer">meowrhino.studio</a></p>
             </div>
           </div>
         </div>
@@ -105,14 +127,14 @@
     </div>
 
     <!-- Reopen button -->
-    <button id="reopen-btn" class="btn-press" hidden>noan</button>
-    <button id="howto-btn" hidden>how to</button>
+    <button id="reopen-btn" class="btn-press" data-i18n="btnReopen" hidden>noan</button>
+    <button id="howto-btn" data-i18n="btnHowto" hidden>how to</button>
   </div>
 
   <!-- ====== VIDEOS WINDOW ====== -->
   <div class="window-frame" id="window-videos" hidden>
     <div class="window-titlebar">
-      <span class="window-title">Videos</span>
+      <span class="window-title" data-i18n="windowVideos">Videos</span>
       <div class="titlebar-controls">
         <button class="close-btn" aria-label="Close" title="Close">&times;</button>
       </div>
@@ -123,7 +145,7 @@
   <!-- ====== GAMES WINDOW ====== -->
   <div class="window-frame" id="window-games" hidden>
     <div class="window-titlebar">
-      <span class="window-title">Games</span>
+      <span class="window-title" data-i18n="windowGames">Games</span>
       <div class="titlebar-controls">
         <button class="close-btn" aria-label="Close" title="Close">&times;</button>
       </div>
@@ -134,7 +156,7 @@
   <!-- ====== MAP WINDOW ====== -->
   <div class="window-frame" id="window-map" hidden>
     <div class="window-titlebar">
-      <span class="window-title">Map</span>
+      <span class="window-title" data-i18n="windowMap">Map</span>
       <div class="titlebar-controls">
         <button class="close-btn" aria-label="Close" title="Close">&times;</button>
       </div>
@@ -204,13 +226,13 @@
   <!-- ====== WELCOME WINDOW (shown on load) ====== -->
   <div class="window-frame" id="welcome-window" hidden>
     <div class="window-titlebar">
-      <span class="window-title">How To</span>
+      <span class="window-title" data-i18n="windowHowTo">How To</span>
       <div class="titlebar-controls">
         <button class="close-btn" id="welcome-dismiss" aria-label="Close">&times;</button>
       </div>
     </div>
     <div class="window-content themed-scroll welcome-content">
-      <p>Drag any window by its title bar to move it around! You can close and reopen any window! Enjoy!</p>
+      <p data-i18n="welcome">Drag any window by its title bar to move it around! You can close and reopen any window! Enjoy!</p>
     </div>
   </div>
 

@@ -37,6 +37,26 @@ html, body {
   overflow: hidden;
 }
 
+/* ====== CUSTOM CURSOR ======
+ * SVG cursors swap between normal and click states.
+ * Browser-side cursor cap is 128×128, so we explicitly request a larger size
+ * via the SVG itself (see assets/cursor/*.svg width/height). Hotspot is
+ * approximately at the artwork's tip. */
+body {
+  cursor: url('assets/cursor/normal.svg') 16 16, auto;
+}
+body.cursor-down {
+  cursor: url('assets/cursor/click.svg') 16 16, auto;
+}
+a, button, .map-pin, .card, [role="button"], #portrait-area, #portrait-img,
+#pfp-gallery, #lang-btn, .bio-link, .window-titlebar, #howto-btn, #reopen-btn {
+  cursor: inherit;
+}
+body.cursor-down a, body.cursor-down button, body.cursor-down .card,
+body.cursor-down .map-pin, body.cursor-down [role="button"] {
+  cursor: inherit;
+}
+
 /*
  * Animated diamond background.
  * Uses repeating-conic-gradient rotated 45° to create a checker/diamond pattern.
@@ -63,7 +83,7 @@ body::before {
   to   { background-position: 320px 0; }
 }
 
-button { font-family: inherit; cursor: pointer; border: none; background: none; }
+button { font-family: inherit; cursor: inherit; border: none; background: none; }
 img { display: block; max-width: 100%; }
 
 /* --- Shared scrollbar theme (Firefox + WebKit) --- */
@@ -188,7 +208,7 @@ img { display: block; max-width: 100%; }
   border: var(--border-thick) solid var(--accent-dark);
   padding: 16px 36px;
   box-shadow: 6px 6px 0 var(--accent-dark);
-  cursor: pointer;
+  cursor: inherit;
   z-index: 10;
   position: relative;
   pointer-events: auto;
@@ -244,15 +264,29 @@ img { display: block; max-width: 100%; }
   background: var(--accent-light);
   overflow: hidden;
   border: var(--border-thin) solid var(--shadow);
-  cursor: pointer;
+  cursor: inherit;
   min-height: 240px;
+  position: relative;
 }
 
-#portrait-img {
+#portrait-img,
+#portrait-img-hover {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: top;
+}
+
+#portrait-img-hover {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+#portrait-area:hover #portrait-img-hover {
+  opacity: 1;
 }
 
 /* ====== ABOUT TEXT (flip back) ====== */
@@ -284,7 +318,7 @@ img { display: block; max-width: 100%; }
 .bio-link {
   color: var(--accent-light);
   text-decoration: none;
-  cursor: pointer;
+  cursor: inherit;
   transition: color 0.1s;
 }
 
@@ -476,7 +510,7 @@ img { display: block; max-width: 100%; }
   display: flex;
   overflow: hidden;
   background: var(--accent);
-  cursor: pointer;
+  cursor: inherit;
   transition: transform 0.08s, box-shadow 0.08s;
   border: var(--border-thin) solid var(--shadow);
   box-shadow: 3px 3px 0 var(--shadow);
@@ -725,6 +759,38 @@ img { display: block; max-width: 100%; }
   opacity: 1;
 }
 
+/* ====== LANGUAGE TOGGLE ====== */
+#lang-btn {
+  font-family: var(--font-hand);
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dark);
+  background: var(--accent-light);
+  border: var(--border-thin) solid var(--accent-dark);
+  padding: 8px 16px;
+  box-shadow: 4px 4px 0 var(--accent-dark);
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  transform: translate(-2px, -3px);
+  z-index: 200;
+  pointer-events: auto;
+  min-width: 60px;
+}
+
+#lang-btn:hover {
+  transform: translate(0, 0);
+  box-shadow: 2px 2px 0 var(--accent-dark);
+  background: var(--accent-pale);
+}
+
+#lang-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--accent-dark);
+}
+
 /* ====== HOW-TO BUTTON ====== */
 #howto-btn {
   font-family: var(--font-hand);
@@ -737,7 +803,7 @@ img { display: block; max-width: 100%; }
   border: var(--border-thin) solid var(--accent-dark);
   padding: 8px 20px;
   box-shadow: 4px 4px 0 var(--accent-dark);
-  cursor: pointer;
+  cursor: inherit;
   position: fixed;
   bottom: 10dvh;
   left: 50%;
@@ -782,7 +848,7 @@ img { display: block; max-width: 100%; }
   justify-content: center;
   margin-bottom: 12px;
   perspective: 600px;
-  cursor: pointer;
+  cursor: inherit;
 }
 
 .pfp-flipper {

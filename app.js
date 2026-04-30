@@ -14,6 +14,24 @@
  */
 
 /* ====== STATE ====== */
+const SUPPORTED_LANGS = ['en', 'es', 'fr'];
+
+/*
+ * Initial language resolution:
+ *   1. Prior choice in localStorage wins (user picked it explicitly).
+ *   2. Otherwise, fall back to the browser's preferred language if supported.
+ *   3. Otherwise, English.
+ */
+function detectInitialLang() {
+  try {
+    const stored = localStorage.getItem('lang');
+    if (stored && SUPPORTED_LANGS.includes(stored)) return stored;
+  } catch (e) { /* private mode / disabled storage */ }
+  const browserLang = (navigator.language || '').toLowerCase().slice(0, 2);
+  if (SUPPORTED_LANGS.includes(browserLang)) return browserLang;
+  return 'en';
+}
+
 const state = {
   data: null,
   openWindows: new Set(),
@@ -24,6 +42,7 @@ const state = {
   mapRendered: false,
   hasHover: window.matchMedia('(hover: hover)').matches,
   homeOpen: true,
+  lang: detectInitialLang(),
 };
 
 /* ====== ASSET PATHS (derived from id, dirs from data.json) ====== */
@@ -66,6 +85,8 @@ function cacheDom() {
   dom.welcomeWindow = document.getElementById('welcome-window');
   dom.welcomeDismiss = document.getElementById('welcome-dismiss');
   dom.pfpGallery = document.getElementById('pfp-gallery');
+  dom.portraitHover = document.getElementById('portrait-img-hover');
+  dom.langBtn = document.getElementById('lang-btn');
 }
 
 /* ====== INIT ====== */
@@ -79,6 +100,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   initDrag();
   initHowTo();
   initPfpGallery();
+  initCursor();
+  applyLang();
 });
 
 /* ====== HOW-TO / WELCOME ====== */
@@ -92,10 +115,17 @@ function showWelcomeWindow() {
   // Register in window system so Escape / click-to-focus work
   state.openWindows.add('welcome-window');
   bringToFront('welcome-window');
-  // Measure after layout, then center based on actual rendered size
-  const rect = win.getBoundingClientRect();
-  win.style.left = Math.max(8, (window.innerWidth - rect.width) / 2) + 'px';
-  win.style.top = Math.max(8, (window.innerHeight - rect.height) / 2) + 'px';
+  // Use offsetWidth/Height (layout size) so the pop-in scale animation
+  // doesn't skew the measurement. Center on the home panel (or viewport
+  // if home is hidden) so the welcome shares the same center as noan.
+  const winW = win.offsetWidth;
+  const winH = win.offsetHeight;
+  const home = dom.homePanel;
+  const anchor = (home && !home.classList.contains('hidden'))
+    ? home.getBoundingClientRect()
+    : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
+  win.style.left = Math.max(8, anchor.left + (anchor.width - winW) / 2) + 'px';
+  win.style.top = Math.max(8, anchor.top + (anchor.height - winH) / 2) + 'px';
 }
 
 function dismissWelcome() {
@@ -235,7 +265,11 @@ function renderHome() {
   const d = state.data;
   dom.portraitImg.src = d.about.portrait;
   dom.portraitImg.alt = d.about.name;
-  renderAboutBio(d.about.bio);
+
+  // Hover variant of the portrait
+  if (dom.portraitHover && d.assets?.portraitHover) {
+    dom.portraitHover.src = d.assets.portraitHover;
+  }
 
   // Set nav button icons from data.json
   const nav = d.assets?.navButtons;
@@ -258,10 +292,10 @@ function renderHome() {
 }
 
 /* ====== ABOUT BIO RENDERING ====== */
-const BIO_LINK_MAP = {
-  'showreels': { window: 'window-videos', label: 'showreels' },
-  'game jams': { window: 'window-games', label: 'game jams' },
-  'map':       { window: 'window-map',   label: 'map' },
+const BIO_LINKS = {
+  'showreels': { window: 'window-videos', i18nKey: 'linkShowreels' },
+  'game jams': { window: 'window-games', i18nKey: 'linkGameJams' },
+  'map':       { window: 'window-map',   i18nKey: 'linkMap' },
 };
 
 function escapeHTML(str) {
@@ -270,19 +304,26 @@ function escapeHTML(str) {
   return d.innerHTML;
 }
 
-function renderAboutBio(bioText) {
+function renderAboutBio() {
+  const bioField = state.data?.about?.bio;
+  // Support legacy string bios (single language) and new {en,es,fr} objects
+  const bioText = typeof bioField === 'string'
+    ? bioField
+    : (bioField?.[state.lang] || bioField?.en || '');
+
   const paragraphs = bioText.split('\n\n');
   const html = paragraphs.map(p => {
-    // Replace {email:...} markers
     let safe = escapeHTML(p);
+    // {email:addr} → mailto link
     safe = safe.replace(/\{email:([^}]+)\}/g, (_, addr) =>
       `<a class="bio-link" href="mailto:${escapeHTML(addr)}">${escapeHTML(addr)}</a>`
     );
-    // Replace {name} markers for window links
+    // {key} → window-opening link, label looked up per language
     safe = safe.replace(/\{([^}]+)\}/g, (_, key) => {
-      const entry = BIO_LINK_MAP[key];
+      const entry = BIO_LINKS[key];
       if (!entry) return key;
-      return `<a class="bio-link bio-nav" href="#" data-open="${entry.window}">${escapeHTML(entry.label)}</a>`;
+      const label = t(entry.i18nKey);
+      return `<a class="bio-link bio-nav" href="#" data-open="${entry.window}">${escapeHTML(label)}</a>`;
     });
     return `<p>${safe}</p>`;
   }).join('');
@@ -532,6 +573,12 @@ function renderVideos() {
 }
 
 /* ====== GAMES (column view) ====== */
+function localized(field) {
+  if (field == null) return '';
+  if (typeof field === 'string') return field;
+  return field[state.lang] || field.en || '';
+}
+
 function renderGames() {
   const tpl = document.getElementById('tpl-game-card');
   const column = document.createElement('div');
@@ -552,9 +599,10 @@ function renderGames() {
       card.classList.add('thumb-error');
     });
     clone.querySelector('.card-title').textContent = g.title;
-    clone.querySelector('.card-desc-gray').textContent = g.description || '';
+    clone.querySelector('.card-desc-gray').textContent = localized(g.description);
     const role = clone.querySelector('.card-role');
-    if (g.role) role.textContent = g.role;
+    const roleText = localized(g.role);
+    if (roleText) role.textContent = roleText;
     else role.remove();
     column.appendChild(clone);
   });
@@ -690,23 +738,24 @@ async function preloadSounds() {
   const sfx = state.data && state.data.soundEffects;
   if (!sfx) return;
   const ctx = state.audioCtx;
-  for (const [type, path] of Object.entries(sfx)) {
-    if (!path) continue;
+  // Load all sounds in parallel so a single slow file doesn't delay the rest.
+  await Promise.all(Object.entries(sfx).map(async ([type, path]) => {
+    if (!path) return;
     try {
       const res = await fetch(path);
       if (!res.ok) {
         console.warn(`Sound '${type}' failed to load (HTTP ${res.status}). Check that the file exists at: ${path}`);
-        continue;
+        return;
       }
       const buf = await res.arrayBuffer();
       state.soundBuffers[type] = await ctx.decodeAudioData(buf);
     } catch (e) {
       console.warn(`Sound '${type}' failed to load. Check that the file exists at: ${path}`, e);
     }
-  }
+  }));
 }
 
-function playSound(type) {
+function playSound(type, options) {
   if (!state.audioCtx) return;
 
   if (!state.soundBuffers[type]) {
@@ -724,9 +773,79 @@ function playSound(type) {
   try {
     const source = state.audioCtx.createBufferSource();
     source.buffer = state.soundBuffers[type];
+    if (options?.pitch && Number.isFinite(options.pitch)) {
+      source.playbackRate.value = options.pitch;
+    }
     source.connect(state.audioCtx.destination);
     source.start();
   } catch (e) { /* audio context suspended or unavailable */ }
+}
+
+/*
+ * ====== I18N ======
+ * Languages and strings live in data.json under "i18n.<code>".
+ * Translatable static elements use [data-i18n="<key>"] attributes in index.html.
+ * Dynamic content (bio, game cards) re-renders on language change via applyLang().
+ * The selected language is persisted in localStorage.
+ */
+function t(key) {
+  const dict = state.data?.i18n?.[state.lang] || state.data?.i18n?.en || {};
+  return dict[key] != null ? dict[key] : key;
+}
+
+function setLang(code) {
+  if (!SUPPORTED_LANGS.includes(code)) return;
+  if (code === state.lang) return;
+  state.lang = code;
+  try { localStorage.setItem('lang', code); } catch (e) { /* private mode */ }
+  applyLang();
+}
+
+function cycleLang() {
+  const idx = SUPPORTED_LANGS.indexOf(state.lang);
+  const next = SUPPORTED_LANGS[(idx + 1) % SUPPORTED_LANGS.length];
+  playSound('changeLang');
+  setLang(next);
+}
+
+function applyLang() {
+  document.documentElement.lang = state.lang;
+
+  // Static elements with data-i18n attribute
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    el.textContent = t(key);
+  });
+
+  // Single language toggle: shows the current language code
+  if (dom.langBtn) dom.langBtn.textContent = state.lang.toUpperCase();
+
+  // Re-render dynamic content that depends on language
+  renderAboutBio();
+  if (state.openWindows.has('window-games')) renderGames();
+}
+
+/*
+ * ====== CUSTOM CURSOR ======
+ * The visual cursor swap (normal ↔ click) is handled by CSS via the
+ * `body.cursor-down` class. JS only toggles the class on mousedown/up.
+ * The same mousedown handler fires the global click-sound, but only when
+ * the click hits empty/background area — interactive elements (buttons,
+ * portrait, pins, windows, etc.) have their own sounds and would otherwise
+ * double up. Pitch is randomized so rapid clicks don't sound mechanical.
+ */
+function initCursor() {
+  // Elements with their own click sound — skip globalClick to avoid doubling up.
+  const INTERACTIVE = 'button, a, .window-frame, .portrait-area, .map-pin, .pfp-gallery, .welcome-window, .home-panel, #portrait-img, #portrait-img-hover, .pfp-flipper, img';
+  document.addEventListener('mousedown', (e) => {
+    document.body.classList.add('cursor-down');
+    if (e.target.closest(INTERACTIVE)) return;
+    playSound('globalClick', { pitch: 0.85 + Math.random() * 0.3 });
+  });
+  const release = () => document.body.classList.remove('cursor-down');
+  document.addEventListener('mouseup', release);
+  document.addEventListener('mouseleave', release);
+  document.addEventListener('blur', release);
 }
 
 /* ====== EVENT BINDING ====== */
@@ -744,6 +863,7 @@ function bindEvents() {
     dom.btnVideos.addEventListener('mouseenter', () => playSound('hoverVideos'));
     dom.btnGames.addEventListener('mouseenter', () => playSound('hoverGames'));
     dom.btnMap.addEventListener('mouseenter', () => playSound('hoverMap'));
+    dom.portraitArea.addEventListener('mouseenter', () => playSound('hoverHome', { pitch: 2 + Math.random() * 0.30 }));
   }
 
   // Close buttons for window frames
@@ -786,7 +906,7 @@ function bindEvents() {
         playSound('flipHomeBack');
       }
     } else {
-      if (e.target.closest('#portrait-img')) {
+      if (e.target.closest('#portrait-img') || e.target.closest('#portrait-img-hover')) {
         dom.homePanel.classList.add('flipped');
         playSound('flipHomeForward');
       }
@@ -845,4 +965,8 @@ function bindEvents() {
     // No extra sound here — openWindow() already plays one
   });
 
+  // Language toggle: cycles EN → ES → FR → EN
+  if (dom.langBtn) {
+    dom.langBtn.addEventListener('click', cycleLang);
+  }
 }
